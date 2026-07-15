@@ -1,0 +1,42 @@
+# Repo label definitions (name / color / description).
+# Synced to GitHub by .github/workflows/labels.yml on push to main.
+# The path labels (web/api/extension/docs/ci/dependencies) are auto-applied
+# by .github/labeler.yml — keep the names here in sync with that file.
+
+# --- area labels (auto-applied by the Labeler workflow) ---
+- name: web
+  color: "1f6feb"
+  description: "Changes in apps/web"
+
+- name: api
+  color: "a371f7"
+  description: "Changes in apps/api"
+
+- name: extension
+  color: "d29922"
+  description: "Changes in apps/extension"
+
+- name: docs
+  color: "0075ca"
+  description: "Documentation and markdown"
+
+- name: ci
+  color: "6e7681"
+  description: "CI and GitHub workflows"
+
+- name: dependencies
+  color: "0366d6"
+  description: "Dependency manifests and lockfile"
+
+# --- triage labels (applied manually) ---
+- name: bug
+  color: "d73a4a"
+  description: "Something isn't working"
+
+- name: enhancement
+  color: "0e8a16"
+  description: "New feature or request"
+
+- name: breaking-change
+  color: "b60205"
+  description: "Backwards-incompatible change"
