@@ -1,0 +1,35 @@
+# Syncs repo labels (name/color/description) from .github/labels.yml.
+# Uses gh + yq, both preinstalled on ubuntu-latest — no third-party action.
+name: Sync labels
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/labels.yml
+      - .github/workflows/labels.yml
+  workflow_dispatch:
+
+permissions:
+  issues: write # labels are managed via the issues API
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Upsert labels from .github/labels.yml
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          count=$(yq 'length' .github/labels.yml)
+          for i in $(seq 0 $((count - 1))); do
+            name=$(yq ".[$i].name" .github/labels.yml)
+            color=$(yq ".[$i].color" .github/labels.yml)
+            desc=$(yq ".[$i].description" .github/labels.yml)
+            echo "syncing: $name (#$color)"
+            # --force upserts: creates the label, or updates color/description if it exists
+            gh label create "$name" --color "$color" --description "$desc" --force
+          done
