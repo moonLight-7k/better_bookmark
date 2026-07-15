@@ -85,6 +85,7 @@ const GlobalSearch: React.FC = () => {
       const storedSearches = localStorage.getItem(RECENT_SEARCHES_KEY);
       if (storedSearches) {
         try {
+          // eslint-disable-next-line react-hooks/set-state-in-effect -- hydrate recent searches from localStorage on mount (SSR-safe)
           setRecentSearches(JSON.parse(storedSearches));
         } catch (e) {
           console.error("Failed to parse recent searches", e);
@@ -235,6 +236,7 @@ const GlobalSearch: React.FC = () => {
 
   useEffect(() => {
     if (isOpen) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reset highlighted result when the search dialog opens
       setSelectedIndex(0);
       setTimeout(() => {
         searchInputRef.current?.focus();

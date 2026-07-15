@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CheckCircle2, AlertTriangle, File, X, Loader2 } from "lucide-react";
@@ -32,27 +32,9 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
   const [progressValue, setProgressValue] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Simulate validation progress when a file is selected
-  useEffect(() => {
-    if (file && uploadStatus !== "error" && uploadStatus !== "success") {
-      let progress = 0;
-      setProgressValue(0);
-
-      const interval = setInterval(() => {
-        progress += 5;
-        setProgressValue(progress);
-
-        if (progress >= 100) {
-          clearInterval(interval);
-          validateFile(file);
-        }
-      }, 50);
-
-      return () => clearInterval(interval);
-    }
-  }, [file, uploadStatus]);
-
-  const validateFile = (selectedFile: File) => {
+  // Declared before the effect below so the effect can reference it; memoized
+  // so it stays a stable effect dependency.
+  const validateFile = useCallback((selectedFile: File) => {
     // HTML bookmark files should have specific content
     const reader = new FileReader();
 
@@ -78,7 +60,28 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
     };
 
     reader.readAsText(selectedFile);
-  };
+  }, []);
+
+  // Simulate validation progress when a file is selected
+  useEffect(() => {
+    if (file && uploadStatus !== "error" && uploadStatus !== "success") {
+      let progress = 0;
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reset the fake progress bar when a new file is selected
+      setProgressValue(0);
+
+      const interval = setInterval(() => {
+        progress += 5;
+        setProgressValue(progress);
+
+        if (progress >= 100) {
+          clearInterval(interval);
+          validateFile(file);
+        }
+      }, 50);
+
+      return () => clearInterval(interval);
+    }
+  }, [file, uploadStatus, validateFile]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {

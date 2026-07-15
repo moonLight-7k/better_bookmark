@@ -37,6 +37,7 @@ export default function Drawer(): React.ReactElement {
 
   useEffect(() => {
     if (isImportDialogOpen) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reset form fields when the import dialog opens
       setFile(null);
       setImportStatus({ type: "idle", message: "" });
     }
@@ -44,6 +45,7 @@ export default function Drawer(): React.ReactElement {
 
   useEffect(() => {
     if (isAddBookmarkDialogOpen) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reset form fields when the add-bookmark dialog opens
       setLink("");
       setAddBookmarkStatus({ type: "idle", message: "" });
     }

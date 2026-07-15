@@ -48,6 +48,7 @@ export const useUserDetails = () => {
   useEffect(() => {
     if (authLoading) return;
     if (!user) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- sync local state to Firebase auth state (external system)
       setUserDetails(null);
       setLoading(false);
       return;

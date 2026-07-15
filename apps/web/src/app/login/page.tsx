@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,16 @@ export default function LoginPage() {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [passwordStrength, setPasswordStrength] = useState<number>(0);
+  // Derived directly from password + isSignUp — no effect/state needed.
+  const passwordStrength = useMemo<number>(() => {
+    if (!isSignUp || !password) return 0;
+    let strength = 0;
+    if (password.length >= 8) strength += 1;
+    if (/[A-Z]/.test(password)) strength += 1;
+    if (/[0-9]/.test(password)) strength += 1;
+    if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+    return strength;
+  }, [password, isSignUp]);
   const {
     user,
     loading,
@@ -48,19 +57,6 @@ export default function LoginPage() {
 
     checkAndRedirect();
   }, [user, loading, router, hasCompletedOnboarding]);
-
-  useEffect(() => {
-    if (isSignUp && password) {
-      let strength = 0;
-      if (password.length >= 8) strength += 1;
-      if (/[A-Z]/.test(password)) strength += 1;
-      if (/[0-9]/.test(password)) strength += 1;
-      if (/[^A-Za-z0-9]/.test(password)) strength += 1;
-      setPasswordStrength(strength);
-    } else {
-      setPasswordStrength(0);
-    }
-  }, [password, isSignUp]);
 
   const getPasswordStrengthLabel = () => {
     if (!password || !isSignUp) return "";

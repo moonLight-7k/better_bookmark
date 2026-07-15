@@ -137,6 +137,7 @@ export const useBookmarks = ({
   // Handle automatic refresh when shouldRefresh is true
   useEffect(() => {
     if (shouldRefresh) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- data fetch triggered by external refresh flag (zustand store)
       fetchBookmarks();
       resetRefresh(); // Reset the flag after fetching
     }
@@ -145,6 +146,7 @@ export const useBookmarks = ({
   // Initial fetch on mount and when user details change
   useEffect(() => {
     if (!userLoading && userDetails?.uid) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- initial data fetch once the authenticated user is known
       fetchBookmarks();
     }
   }, [userDetails?.uid, userLoading, fetchBookmarks]);
