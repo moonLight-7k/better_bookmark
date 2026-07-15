@@ -33,7 +33,7 @@ import LinkCardSkeleton from "./skeleton/CardSkeleton";
 import { SearchResult as SearchResultType } from "@/types/search";
 import { useInfiniteSearchBookmarks } from "@/hooks/useApiQuery";
 import { useAuth } from "@/context/AuthContext";
-import { getGridColumns } from "@/utils/helper";
+import { getGridMetrics } from "@/utils/helper";
 
 type SortOption = "relevance" | "clicks" | "title";
 const RECENT_SEARCHES_KEY = "recentSearches";
@@ -44,13 +44,17 @@ const GlobalSearch: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("relevance");
-  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const resultsContainerRef = useRef<HTMLDivElement>(null);
   const scrollObserverTarget = useRef<HTMLDivElement>(null);
   const [windowHeight, setWindowHeight] = useState(700);
-  const [gridColumns, setGridColumns] = useState(4);
+  const [grid, setGrid] = useState({
+    columns: 4,
+    itemHeight: 202,
+    gridWidth: 800,
+  });
   const { user } = useAuth();
 
   const {
@@ -89,7 +93,7 @@ const GlobalSearch: React.FC = () => {
 
       const updateWindowHeight = () => {
         setWindowHeight(window.innerHeight - 320);
-        setGridColumns(getGridColumns());
+        setGrid(getGridMetrics());
       };
 
       updateWindowHeight();
@@ -152,13 +156,6 @@ const GlobalSearch: React.FC = () => {
       }
     };
   }, [isOpen, hasNextPage, isFetchingNextPage, fetchNextPage]);
-
-  // Add to recent searches only when search is executed
-  useEffect(() => {
-    if (debouncedQuery.trim() && results) {
-      addToRecentSearches(debouncedQuery);
-    }
-  }, [debouncedQuery, results, addToRecentSearches]);
 
   const sortedResults = useMemo(() => {
     if (!results) return [];
@@ -238,7 +235,7 @@ const GlobalSearch: React.FC = () => {
 
   useEffect(() => {
     if (isOpen) {
-      setSelectedIndex(-1);
+      setSelectedIndex(0);
       setTimeout(() => {
         searchInputRef.current?.focus();
       }, 100);
@@ -327,14 +324,26 @@ const GlobalSearch: React.FC = () => {
               placeholder="Search with meaning - try describing content, concepts, or ideas..."
               className="pl-10 max-sm:pl-8 pr-24 max-sm:pr-12 border-transparent border-none h-12 max-h-12 hover:border-transparent focus:border-transparent focus:ring-0 bg-transparent text-white placeholder:text-gray-400 max-sm:text-sm max-sm:placeholder:text-xs"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setSelectedIndex(0); // auto-select top result on new query
+              }}
               onKeyDown={handleSearchKeyDown}
               aria-label="Semantic search for bookmarks"
               aria-autocomplete="list"
               autoComplete="on"
             />
-            {/* Desktop: Enter button */}
-            <button className="absolute hidden sm:flex items-end gap-2 border border-[#F96E2A] right-2 top-1/2 -translate-y-1/2 rounded-md bg-gradient-to-r from-[#F26B0F]/10 to-[#FA812F]/20 hover:from-[#F26B0F]/50 hover:to-[#FA812F] px-3 py-1 text-white transition-colors">
+            {/* Desktop: Enter button — opens the selected (top) result */}
+            <button
+              type="button"
+              onClick={() => {
+                const target = sortedResults[selectedIndex] || sortedResults[0];
+                if (target?.site) handleResultClick(target.site);
+              }}
+              disabled={sortedResults.length === 0}
+              aria-label="Open selected bookmark"
+              className="absolute hidden sm:flex items-end gap-2 border border-[#F96E2A] right-2 top-1/2 -translate-y-1/2 rounded-md bg-gradient-to-r from-[#F26B0F]/10 to-[#FA812F]/20 hover:from-[#F26B0F]/50 hover:to-[#FA812F] px-3 py-1 text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:from-[#F26B0F]/10 disabled:hover:to-[#FA812F]/20"
+            >
               <span className="font-mono text-xs font-medium">Enter</span>
               <CornerDownLeft size={14} color="white" />
             </button>
@@ -447,7 +456,10 @@ const GlobalSearch: React.FC = () => {
                   <div className="relative inline-block">
                     <select
                       value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value as SortOption)}
+                      onChange={(e) => {
+                        setSortBy(e.target.value as SortOption);
+                        setSelectedIndex(0);
+                      }}
                       className="bg-[#444444] border border-gray-600 rounded px-2 py-1 pr-8 max-sm:pr-7 text-white max-sm:text-xs focus:outline-none cursor-pointer appearance-none"
                       aria-label="Sort results by"
                     >
@@ -470,15 +482,22 @@ const GlobalSearch: React.FC = () => {
               </div>
               <VirtualizedView
                 items={sortedResults}
-                itemHeight={200}
+                itemHeight={grid.itemHeight}
                 windowHeight={windowHeight}
                 layout="grid"
-                gridColumns={gridColumns}
+                gridColumns={grid.columns}
                 className="w-full px-0 h-fit sm:px-0 lg:px-2 custom-scrollbar"
-                containerClassName="px-0 sm:px-0 lg:px-0"
+                containerStyle={{
+                  width: grid.gridWidth,
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                }}
                 itemClassName="flex justify-center items-center"
                 renderItem={(data: SearchResultType, index: number) => (
                   <div
+                    onClick={() =>
+                      debouncedQuery && addToRecentSearches(debouncedQuery)
+                    }
                     className={`result-card transition-all duration-200 transform ${
                       selectedIndex === index
                         ? "scale-[1.03] ring-2 ring-[#F96E2A] rounded-lg shadow-md shadow-[#F96E2A]/20"
