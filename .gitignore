@@ -21,3 +21,7 @@ logs/
 
 # os
 .DS_Store
+
+# local tooling / agent dirs
+.claude/
+.serena/
