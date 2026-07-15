@@ -2,6 +2,12 @@ packages:
   - 'apps/*'
   - 'packages/*'
 
+# Force a single @types/react across the workspace — the extension pulls v18,
+# web needs v19; duplicates break web's type-check (ReactNode mismatch).
+overrides:
+  '@types/react': 19.2.17
+  '@types/react-dom': 19.2.3
+
 onlyBuiltDependencies:
   - '@firebase/util'
   - '@vercel/speed-insights'

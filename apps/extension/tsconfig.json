@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es2022", // Specify ECMAScript target version
+    "lib": ["dom", "dom.iterable", "esnext"], // Include libraries
+    "allowJs": false, // Disallow JavaScript files
+    "skipLibCheck": true, // Skip type checking for libraries
+    "strict": true, // Enable strict type-checking options
+    "forceConsistentCasingInFileNames": true, // Enforce consistent casing in file names
+    "noEmit": true, // Do not emit output files
+    "esModuleInterop": true, // Enable interoperability between CommonJS and ES Modules
+    "module": "esnext", // Specify module code generation
+    "moduleResolution": "node", // Use Node.js-style module resolution
+    "resolveJsonModule": true, // Allow importing JSON modules
+    "isolatedModules": true, // Ensure each file can be transpiled in isolation
+    "jsx": "react-jsx", // Enable React JSX
+    "types": ["node", "react", "react-dom", "chrome"] // Include type definitions
+  },
+  "include": [
+    "src/**/*" // Include all TypeScript/TSX files in the 'src' folder
+  ],
+  "exclude": ["node_modules", ".next", "dist"]
+}
