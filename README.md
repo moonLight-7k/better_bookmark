@@ -62,7 +62,8 @@ Run from the repo root; turbo fans them out to both apps.
 ## API
 
 All routes require a Firebase ID token (`Authorization: Bearer <token>`) except
-`/health`. Full reference: [`apps/api/docs/API_LIST.md`](apps/api/docs/API_LIST.md).
+`/health`. Contract: [`docs/openapi.yaml`](docs/openapi.yaml). Endpoint reference
+with curl examples: [`apps/api/docs/API_LIST.md`](apps/api/docs/API_LIST.md).
 
 | Method | Endpoint                 | Purpose                        |
 | ------ | ------------------------ | ------------------------------ |
@@ -71,3 +72,8 @@ All routes require a Firebase ID token (`Authorization: Bearer <token>`) except
 | POST   | `/api/v1/upload`         | Upload a bookmarks export      |
 | GET    | `/api/v1/list/:userId`   | List all bookmarks             |
 | POST   | `/api/v1/addBookmark`    | Add a single bookmark          |
+
+## Docs
+
+- [`docs/openapi.yaml`](docs/openapi.yaml) — OpenAPI 3.1 contract for the API
+- [`docs/ingestion.md`](docs/ingestion.md) — how upload, URL parsing & data extraction work
