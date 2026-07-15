@@ -5,7 +5,7 @@ import cors from "cors";
 import multer from "multer";
 import morgan from "morgan";
 import helmet from "helmet";
-import rateLimit from "express-rate-limit";
+import rateLimit, { ipKeyGenerator } from "express-rate-limit";
 import compression from "compression";
 
 import { healthController } from "controller/health/health.controller";
@@ -96,7 +96,8 @@ const searchLimiter = rateLimit({
   message: "Too many search requests, please try again later",
   standardHeaders: true,
   legacyHeaders: false,
-  keyGenerator: (req) => req.authenticatedUserId || req.ip || "anonymous",
+  keyGenerator: (req) =>
+    req.authenticatedUserId || (req.ip ? ipKeyGenerator(req.ip) : "anonymous"),
 });
 
 const uploadLimiter = rateLimit({
@@ -105,7 +106,8 @@ const uploadLimiter = rateLimit({
   message: "Too many upload requests, please try again later",
   standardHeaders: true,
   legacyHeaders: false,
-  keyGenerator: (req) => req.authenticatedUserId || req.ip || "anonymous",
+  keyGenerator: (req) =>
+    req.authenticatedUserId || (req.ip ? ipKeyGenerator(req.ip) : "anonymous"),
 });
 
 const addBookmarkLimiter = rateLimit({
@@ -114,7 +116,8 @@ const addBookmarkLimiter = rateLimit({
   message: "Too many bookmark additions, please try again later",
   standardHeaders: true,
   legacyHeaders: false,
-  keyGenerator: (req) => req.authenticatedUserId || req.ip || "anonymous",
+  keyGenerator: (req) =>
+    req.authenticatedUserId || (req.ip ? ipKeyGenerator(req.ip) : "anonymous"),
 });
 
 // Public routes (no authentication required)
