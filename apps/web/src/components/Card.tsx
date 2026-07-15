@@ -1,7 +1,7 @@
 import { useState, memo } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { MoveUpRight, Pin } from "lucide-react";
+import { Link2, Pin } from "lucide-react";
 
 interface BookmarkProps {
   id?: string;
@@ -81,15 +81,12 @@ const LinkCard: React.FC<BookmarkProps> = ({
         />
       )}
 
-      <MoveUpRight
-        size={22}
-        opacity={0.4}
-        className="border rounded-full p-0.5 absolute top-3 right-3 border-[#ffffff40] hover:border-[#ffffff3c] hover:bg-[#ffffff12] hover:scale-110 duration-200 opacity-70"
-        aria-hidden="true"
-        color="#ffffff40"
+      <Link2
+        className="absolute right-2 opacity-50 top-1.5 hover:opacity-90"
+        size={18}
       />
 
-      <div className="flex flex-col items-start w-full gap-2 mt-4 max-sm:mt-2 ">
+      <div className="flex flex-col items-start  w-full gap-2 mt-3 max-sm:mt-2 ">
         <Image
           {...(index < 12 ? { priority: true } : { loading: "lazy" as const })}
           src={
@@ -100,9 +97,9 @@ const LinkCard: React.FC<BookmarkProps> = ({
               : `https://www.google.com/s2/favicons?domain=${link}&sz=128`
           }
           alt={`${title || domain} favicon`}
-          width={1000}
-          height={1000}
-          className="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-[8px] hover:scale-110 duration-200 opacity-90"
+          width={100}
+          height={100}
+          className="w-10 h-10 max-sm:w-6 max-sm:h-6 rounded-[8px] hover:scale-110 duration-200 opacity-90"
           onError={() => {
             setImageError(true);
           }}

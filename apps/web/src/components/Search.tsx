@@ -111,7 +111,7 @@ const GlobalSearch: React.FC = () => {
     setRecentSearches((prev) => {
       const newSearches = [query, ...prev.filter((s) => s !== query)].slice(
         0,
-        MAX_RECENT_SEARCHES
+        MAX_RECENT_SEARCHES,
       );
 
       localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(newSearches));
@@ -142,7 +142,7 @@ const GlobalSearch: React.FC = () => {
           fetchNextPage();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     const currentTarget = scrollObserverTarget.current;
@@ -195,7 +195,7 @@ const GlobalSearch: React.FC = () => {
       }
       window.open(url, "_blank");
     },
-    [searchQuery, addToRecentSearches]
+    [searchQuery, addToRecentSearches],
   );
 
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
@@ -215,7 +215,7 @@ const GlobalSearch: React.FC = () => {
       if (e.key === "ArrowDown") {
         e.preventDefault();
         setSelectedIndex((prev) =>
-          prev < sorted.length - 1 ? prev + 1 : prev
+          prev < sorted.length - 1 ? prev + 1 : prev,
         );
       } else if (e.key === "ArrowUp") {
         e.preventDefault();
@@ -230,7 +230,7 @@ const GlobalSearch: React.FC = () => {
         handleResultClick(sorted[selectedIndex].site);
       }
     },
-    [sortedResults, selectedIndex, handleResultClick]
+    [sortedResults, selectedIndex, handleResultClick],
   );
 
   useEffect(() => {
@@ -316,8 +316,8 @@ const GlobalSearch: React.FC = () => {
       )}
 
       <Dialog modal open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="sm:max-w-[85vw] lg:max-w-[75vw] max-w-[95vw] max-h-[90vh] h-fit overflow-hidden bg-[#323232] border border-zinc-500 shadow-2xl transition-all duration-100 ease-in-out p-4 sm:p-6">
-          <div className="relative text-white h-12 max-h-12 border overflow-hidden rounded-lg focus-within:ring-1 focus-within:ring-[#F96E2A] focus-within:border-[#F96E2A] bg-[#3a3a3a] transition-transform duration-200">
+        <DialogContent className="sm:max-w-[85vw] lg:max-w-[70vw] max-w-[95vw] max-h-[90vh] h-fit overflow-hidden bg-[#323232] border border-zinc-500 shadow-2xl transition-all duration-100 ease-in-out p-4 sm:p-6">
+          <div className="relative text-white  h-12 max-h-12 border overflow-hidden rounded-lg focus-within:ring-1 focus-within:ring-[#F96E2A] focus-within:border-[#F96E2A] bg-[#3a3a3a] transition-transform duration-200">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-orange/70 group-focus-within:text-[#F96E2A] transition-colors max-sm:w-4 max-sm:h-4 max-sm:left-2" />
             <Input
               ref={searchInputRef}
