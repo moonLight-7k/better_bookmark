@@ -2,7 +2,7 @@
 import { useEffect, useState, useMemo, useRef, type JSX } from "react";
 import Card from "./Card";
 import VirtualizedView from "./VirtualizedView";
-import { getGridColumns } from "@/utils/helper";
+import { getGridMetrics } from "@/utils/helper";
 import LinkCardSkeleton from "./skeleton/CardSkeleton";
 import ErrorDisplay from "./ErrorDisplay";
 import { useInfiniteBookmarks } from "@/hooks/useApiQuery";
@@ -128,15 +128,17 @@ export default function Main() {
   const cardList = useMemo((): JSX.Element | undefined => {
     if (!allBookmarks.length) return undefined;
 
+    const { columns, itemHeight, gridWidth } = getGridMetrics();
+
     return (
       <VirtualizedView
         items={allBookmarks as SearchResult[]}
-        itemHeight={200}
+        itemHeight={itemHeight}
         windowHeight={windowHeight}
         layout="grid"
-        gridColumns={getGridColumns()}
+        gridColumns={columns}
         className="w-fit h-screen"
-        containerClassName="w-screen px-0 sm:px-0 lg:px-[15vw]"
+        containerStyle={{ width: gridWidth }}
         itemClassName="flex flex-grow justify-center items-center"
         scrollContainerRef={scrollContainerRef}
         observerTarget={loadingIndicator}

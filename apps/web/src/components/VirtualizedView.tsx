@@ -11,6 +11,7 @@ interface VirtualizedComponentProps {
   renderItem: (item: SearchResult, index: number) => React.ReactNode;
   className?: string;
   containerClassName?: string;
+  containerStyle?: React.CSSProperties;
   itemClassName?: string;
   scrollContainerRef?: React.RefObject<HTMLDivElement | null>;
   observerTarget?: React.ReactNode;
@@ -25,6 +26,7 @@ const VirtualizedView = ({
   renderItem,
   className = "",
   containerClassName = "",
+  containerStyle,
   itemClassName = "",
   scrollContainerRef,
   observerTarget,
@@ -112,6 +114,7 @@ const VirtualizedView = ({
         )}
         style={{
           height: `${windowHeight}px`,
+          ...containerStyle,
         }}
       >
         <div className="relative" style={{ height: `${totalHeight}px` }}>
