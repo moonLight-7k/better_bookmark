@@ -11,9 +11,6 @@ const nextConfig = {
     formats: ['image/webp', 'image/avif'], // Modern formats for better compression
   },
 
-  // Enable SWC minification for better performance
-  swcMinify: true,
-
   // Optimize production builds
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? {

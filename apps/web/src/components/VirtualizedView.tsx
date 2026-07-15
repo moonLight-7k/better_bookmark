@@ -12,7 +12,7 @@ interface VirtualizedComponentProps {
   className?: string;
   containerClassName?: string;
   itemClassName?: string;
-  scrollContainerRef?: React.RefObject<HTMLDivElement>;
+  scrollContainerRef?: React.RefObject<HTMLDivElement | null>;
   observerTarget?: React.ReactNode;
 }
 

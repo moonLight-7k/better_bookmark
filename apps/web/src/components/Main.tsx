@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useState, useMemo, useRef, type JSX } from "react";
 import Card from "./Card";
 import VirtualizedView from "./VirtualizedView";
 import { getGridColumns } from "@/utils/helper";

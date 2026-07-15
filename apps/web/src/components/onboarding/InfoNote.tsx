@@ -34,9 +34,12 @@ export const InfoNote: React.FC<InfoNoteProps> = ({
       >
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-1">
-            {React.cloneElement(icon as React.ReactElement, {
-              style: { color: accentColor },
-            })}
+            {React.cloneElement(
+              icon as React.ReactElement<{ style?: React.CSSProperties }>,
+              {
+                style: { color: accentColor },
+              }
+            )}
             <span className="font-medium" style={{ color: accentColor }}>
               {title}
             </span>

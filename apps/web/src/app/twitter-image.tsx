@@ -11,6 +11,12 @@ export const size = {
 export const contentType = "image/png";
 
 export default async function Image() {
+  // Inline the bundled SVG as a data URI (satori needs a data URI / absolute
+  // URL, not a public path). edge-safe: no Buffer/fs.
+  const logoSrc = await fetch(new URL("../../public/LogoFull.svg", import.meta.url))
+    .then((res) => res.text())
+    .then((svg) => `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`);
+
   return new ImageResponse(
     (
       <div
@@ -29,7 +35,7 @@ export default async function Image() {
         }}
       >
         <img
-          src={new URL("/public/LogoFull.svg", import.meta.url).toString()}
+          src={logoSrc}
           alt="betterBookmark Logo"
           width={180}
           height={180}
