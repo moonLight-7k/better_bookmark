@@ -2,6 +2,16 @@ packages:
   - 'apps/*'
   - 'packages/*'
 
+# Force a single @types/react across the workspace — the extension pulls v18,
+# web needs v19; duplicates break web's type-check (ReactNode mismatch).
+overrides:
+  '@types/react': 19.2.17
+  '@types/react-dom': 19.2.3
+  # Collapse vitest's peer vite onto the extension's vite@7 — otherwise pnpm
+  # installs a second vite@5 copy that drags in vulnerable esbuild@0.21.5
+  # (GHSA-67mh-4wv8-2f99). Only the extension uses vite; web/api don't.
+  vite: '^7.0.0'
+
 onlyBuiltDependencies:
   - '@firebase/util'
   - '@vercel/speed-insights'
@@ -10,3 +20,11 @@ onlyBuiltDependencies:
   - protobufjs
   - sharp
   - unrs-resolver
+
+allowBuilds:
+  '@firebase/util': set this to true or false
+  esbuild: set this to true or false
+  onnxruntime-node: set this to true or false
+  protobufjs: set this to true or false
+  sharp: set this to true or false
+  unrs-resolver: set this to true or false
