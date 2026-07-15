@@ -1,0 +1,320 @@
+openapi: 3.1.0
+info:
+  title: betterBookmark API
+  version: 1.0.0
+  description: |
+    Backend for betterBookmark — an AI-powered semantic bookmark manager.
+
+    Bookmarks are stored per user in Firebase Realtime Database and indexed as
+    OpenAI embeddings in ChromaDB (one collection per user). Search embeds the
+    query and returns bookmarks by vector similarity.
+
+    All endpoints except `/health` require a Firebase ID token. The token's UID
+    must match the `userId` in the request (enforced by the `authorizeUser`
+    middleware).
+  license:
+    name: ISC
+
+servers:
+  - url: https://api.betterbookmark.me/api/v1
+    description: Production (set to your deployed host)
+  - url: http://localhost:3003/api/v1
+    description: Local development
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: system
+  - name: bookmarks
+  - name: search
+
+paths:
+  /health:
+    get:
+      tags: [system]
+      summary: Liveness check
+      security: []
+      responses:
+        "200":
+          description: Server is up
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string, example: ok }
+                  timestamp: { type: string, format: date-time }
+
+  /search/{query}:
+    post:
+      tags: [search]
+      summary: Semantic search over the user's bookmarks
+      description: |
+        Embeds `query` and returns the nearest bookmarks by vector similarity.
+        Results are paginated in-memory after ranking.
+
+        Rate limit: 100 requests / 15 min per user.
+      parameters:
+        - name: query
+          in: path
+          required: true
+          description: Natural-language search text (1–500 chars).
+          schema: { type: string, minLength: 1, maxLength: 500 }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [userId]
+              properties:
+                userId: { $ref: "#/components/schemas/UserId" }
+                page: { type: integer, minimum: 1, default: 1 }
+                limit: { type: integer, minimum: 1, maximum: 100, default: 24 }
+      responses:
+        "200":
+          description: Ranked, paginated matches (empty list if nothing matches)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SearchResponse" }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+        "500": { $ref: "#/components/responses/ServerError" }
+
+  /upload:
+    post:
+      tags: [bookmarks]
+      summary: Bulk-import a browser bookmarks export
+      description: |
+        Accepts a browser bookmarks HTML export (or a zip containing one).
+        The server parses `<a>` tags from the HTML — it does **not** crawl the
+        linked pages during bulk upload. Parsed bookmarks are written to
+        Firebase and embedded into the user's ChromaDB collection.
+
+        Max file size 50 MB. Rate limit: 10 uploads / hour per user.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file, userId]
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: >
+                    Bookmarks file. Allowed content types: text/html,
+                    application/html, text/plain, application/zip,
+                    application/x-zip-compressed.
+                userId: { $ref: "#/components/schemas/UserId" }
+      responses:
+        "200":
+          description: Import succeeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean, example: true }
+                  message: { type: string, example: File uploaded successfully }
+                  data:
+                    type: object
+                    properties:
+                      bookmarksProcessed: { type: integer, example: 342 }
+        "400":
+          description: >
+            Validation failed, no file provided, no HTML found in the zip, or no
+            valid links found in the file.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+        "500": { $ref: "#/components/responses/ServerError" }
+
+  /list/{userId}:
+    get:
+      tags: [bookmarks]
+      summary: List all of a user's bookmarks (paginated)
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: { $ref: "#/components/schemas/UserId" }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1, default: 1 }
+        - name: limit
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100, default: 40 }
+      responses:
+        "200":
+          description: Paginated bookmarks
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Pagination"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items: { $ref: "#/components/schemas/Bookmark" }
+        "400": { $ref: "#/components/responses/ValidationError" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404":
+          description: User has no bookmarks
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "500": { $ref: "#/components/responses/ServerError" }
+
+  /addBookmark:
+    post:
+      tags: [bookmarks]
+      summary: Add a single bookmark by URL
+      description: |
+        Fetches the target page, extracts its title and description (regex over
+        the first 100 KB, 5 s timeout), stores the bookmark, and returns it.
+
+        Rate limit: 50 additions / hour per user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [userId, link]
+              properties:
+                userId: { $ref: "#/components/schemas/UserId" }
+                link:
+                  type: string
+                  format: uri
+                  maxLength: 2048
+                  example: https://example.com/some-article
+      responses:
+        "200":
+          description: Bookmark added
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string, example: Bookmark added successfully }
+                  bookmark: { $ref: "#/components/schemas/Bookmark" }
+        "400":
+          description: Invalid URL, no data found, or validation error
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+        "500": { $ref: "#/components/responses/ServerError" }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Firebase ID token.
+
+  schemas:
+    UserId:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: "^[a-zA-Z0-9_-]+$"
+      description: Firebase UID.
+      example: 3kR9xYqZ1aBcDeFgHiJkLmNoPq02
+
+    Bookmark:
+      type: object
+      properties:
+        index: { type: integer }
+        rank: { type: integer }
+        title: { type: string }
+        icon: { type: string }
+        description: { type: string }
+        site: { type: string, format: uri }
+        id: { type: string }
+        tags:
+          type: array
+          items: { type: string }
+          example: [all]
+        dateAdded: { type: string }
+        clickCount: { type: integer }
+        pinned: { type: boolean }
+
+    SearchResult:
+      type: object
+      properties:
+        title: { type: string }
+        site: { type: string, format: uri }
+        tags:
+          type: array
+          items: { type: string }
+        description: { type: string }
+        dateAdded: { type: string }
+        relevanceScore:
+          type: number
+          description: Vector-similarity score (higher is closer).
+        rank: { type: integer }
+
+    Pagination:
+      type: object
+      properties:
+        totalResults: { type: integer }
+        totalPages: { type: integer }
+        currentPage: { type: integer }
+        pageSize: { type: integer }
+        hasNextPage: { type: boolean }
+        hasPreviousPage: { type: boolean }
+
+    SearchResponse:
+      allOf:
+        - $ref: "#/components/schemas/Pagination"
+        - type: object
+          properties:
+            results:
+              type: array
+              items: { $ref: "#/components/schemas/SearchResult" }
+            message:
+              type: string
+              description: Present only when there are no matches.
+
+    Error:
+      type: object
+      properties:
+        success: { type: boolean, example: false }
+        error: { type: string }
+        message: { type: string }
+        details:
+          type: array
+          description: Zod issue list, present on validation errors.
+          items: { type: object }
+
+  responses:
+    ValidationError:
+      description: Request failed schema validation
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    Unauthorized:
+      description: Missing/invalid Firebase token, or token UID ≠ requested userId
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    RateLimited:
+      description: Rate limit exceeded
+      content:
+        text/plain:
+          schema: { type: string, example: Too many requests, please try again later }
+    ServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
