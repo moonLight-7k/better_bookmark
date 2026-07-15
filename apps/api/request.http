@@ -1,0 +1,633 @@
+###############################################
+# BetterBookmark API Test Requests
+# Base URL: http://localhost:3003/api/v1
+
+
+###############################################
+# SETUP INSTRUCTIONS:
+# 1. Get your Firebase authentication token from the frontend app
+#    (found in browser DevTools > Application > IndexedDB > firebaseLocalStorage)
+# 2. Get your user ID from Firebase (same location, or from your Firebase Console)
+# 3. Replace the values below with your actual credentials
+#
+# SECURITY WARNING: Never commit real tokens to version control!
+# Use a .env file or environment-specific config for production
+
+@baseUrl = https://betterb-backend-production.up.railway.app/api/v1
+# @baseUrl = http://localhost:3003/api/v1  # Uncomment for local development
+
+# IMPORTANT: Replace with your actual Firebase ID token
+# Tokens expire after 1 hour - get a fresh one if you get 401 errors
+@firebaseToken = eyJhbGciOiJSUzI1NiIsImtpZCI6IjM4MDI5MzRmZTBlZWM0NmE1ZWQwMDA2ZDE0YTFiYWIwMWUzNDUwODMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiVXBsb2FkZWQiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jSTJ2UmEzdTlUZ285QmFPVnVtVkpnUEZhRE03dzVfTjNPdlZFZFhpaTJxdDRlYXBPQT1zOTYtYyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9iZXR0ZXJib29rbWFyay1iODA0YiIsImF1ZCI6ImJldHRlcmJvb2ttYXJrLWI4MDRiIiwiYXV0aF90aW1lIjoxNzYyOTM1NTg5LCJ1c2VyX2lkIjoiWWZJRHFOakF3cFVKUWJRV1FadGlPZEVsc202MiIsInN1YiI6IllmSURxTmpBd3BVSlFiUVdRWnRpT2RFbHNtNjIiLCJpYXQiOjE3NjI5MzU1ODksImV4cCI6MTc2MjkzOTE4OSwiZW1haWwiOiJ5aW55aW5nZGFya0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJnb29nbGUuY29tIjpbIjExMjQzODc5MDQ3NTkwNjA3Mjc4NSJdLCJlbWFpbCI6WyJ5aW55aW5nZGFya0BnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJnb29nbGUuY29tIn19.Sp01RLzAoWr-ndCvpDyg3e-lFd_Y0tnATXnnDDO4UPhqlzgLvFjj3kVr9AkkxX4uYisQ9VGrK6NMLnbIxvGYJBKAWxNpuLXlZAD9aHnqm5IHXhuy8sLFD699Z0TtPQcN8WeYcBGEgfUNOKEzpmc6fArfpG2PdqQsTZhdSqS__kgn8k_EeWcGm_4xJSSirKDGcpxkcRS4uD90e3eUtUTUzikHEpyvWZw2ry4XYBugAUpzX-CRVhQV0Z_v8TJLwd-MgKQFecdDlP5U9ZIgn2gMtOBNN8QRCu2E_boOsvew_GV288I4WUxLMZcPB9jsnIL0MWFnE5yTHxx8GjCtnv83gg
+
+# IMPORTANT: Replace with your actual Firebase user ID
+# This MUST match the user ID in your Firebase token, or you'll get 403 Forbidden
+@testUserId = YfIDqNjAwpUJQbQWQZtiOdElsm62
+
+
+###############################################
+# 1. HEALTH CHECK (No Auth Required)
+
+
+###############################################
+
+
+### Get API Health Status
+GET {{baseUrl}}/health
+Content-Type: application/json
+
+
+###############################################
+# 2. SEARCH BOOKMARKS
+
+
+###############################################
+
+
+### Search: Simple Query
+POST {{baseUrl}}/search/vector embeddings
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}"
+}
+
+
+### Search: Machine Learning
+POST {{baseUrl}}/search/machine learning tutorial
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}"
+}
+
+
+### Search: Web Development
+POST {{baseUrl}}/search/react hooks useState
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}"
+}
+
+
+### Search: Programming Language
+POST {{baseUrl}}/search/python async await
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}"
+}
+
+
+### Search: Database Query
+POST {{baseUrl}}/search/postgresql optimization
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}"
+}
+
+
+### Search: Empty Query (Should Fail - 400)
+POST {{baseUrl}}/search/   
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}"
+}
+
+
+### Search: Very Long Query (Should Fail if >500 chars)
+POST {{baseUrl}}/search/this is a very long search query that goes on and on and on and continues for a very long time with many words and phrases and technical terms and concepts and ideas that keep going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and going and beyond the maximum allowed length
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}"
+}
+
+
+### Search: Missing Authorization (Should Fail - 401)
+POST {{baseUrl}}/search/test query
+Content-Type: application/json
+
+{
+  "userId": "{{testUserId}}"
+}
+
+
+### Search: Missing UserId (Should Fail - 400)
+POST {{baseUrl}}/search/test query
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{}
+
+
+### Search: Invalid UserId Format (Should Fail - 400 Validation Error)
+# This tests that invalid userId formats are caught by Zod validation
+# Expected: 400 Bad Request with validation error
+POST {{baseUrl}}/search/test query
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "invalid-user-id-with-spaces-and-special-chars!"
+}
+
+
+### Search: Unauthorized Access Attempt (Should Fail - 403 Forbidden)
+# This tests that users cannot access other users' data
+# Expected: 403 Forbidden - Authorization denied
+# NOTE: Change "DIFFERENT_USER_ID_HERE" to a valid but different user ID to test
+POST {{baseUrl}}/search/test query
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "kDcDxFooqlNggViiihoYJr8TWdA2"
+}
+
+
+###############################################
+# 3. UPLOAD BOOKMARKS FILE
+
+
+###############################################
+
+
+### Upload: HTML Bookmarks File
+# NOTE: Replace the file path with your actual bookmarks.html file
+POST {{baseUrl}}/upload
+Authorization: Bearer {{firebaseToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="userId"
+
+{{testUserId}}
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="bookmarks.html"
+Content-Type: text/html
+
+<!DOCTYPE NETSCAPE-Bookmark-file-1>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<TITLE>Bookmarks</TITLE>
+<H1>Bookmarks</H1>
+<DL><p>
+    <DT><A HREF="https://github.com">GitHub</A>
+    <DT><A HREF="https://stackoverflow.com">Stack Overflow</A>
+    <DT><A HREF="https://developer.mozilla.org">MDN Web Docs</A>
+</DL><p>
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+### Upload: Missing File (Should Fail - 400)
+POST {{baseUrl}}/upload
+Authorization: Bearer {{firebaseToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="userId"
+
+{{testUserId}}
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+### Upload: Missing UserId (Should Fail - 400)
+POST {{baseUrl}}/upload
+Authorization: Bearer {{firebaseToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="bookmarks.html"
+Content-Type: text/html
+
+<!DOCTYPE NETSCAPE-Bookmark-file-1>
+<TITLE>Bookmarks</TITLE>
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+### Upload: Invalid File Type (Should Fail - 400)
+POST {{baseUrl}}/upload
+Authorization: Bearer {{firebaseToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="userId"
+
+{{testUserId}}
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="test.pdf"
+Content-Type: application/pdf
+
+PDF content here
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+### Upload: Missing Authorization (Should Fail - 401)
+POST {{baseUrl}}/upload
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="userId"
+
+{{testUserId}}
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="bookmarks.html"
+Content-Type: text/html
+
+<!DOCTYPE NETSCAPE-Bookmark-file-1>
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+###############################################
+# 4. GET ALL BOOKMARKS
+
+
+###############################################
+
+
+### Get All Bookmarks for User
+GET {{baseUrl}}/list/{{testUserId}}
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+
+### Get Bookmarks: Different User ID (Example)
+GET {{baseUrl}}/list/anotherUserId123
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+
+### Get Bookmarks: Missing Authorization (Should Fail - 401)
+GET {{baseUrl}}/list/{{testUserId}}
+Content-Type: application/json
+
+
+### Get Bookmarks: Invalid UserId Format (Should Fail - 400)
+GET {{baseUrl}}/list/invalid user id!
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+
+### Get Bookmarks: Non-existent User (Should Return 404)
+GET {{baseUrl}}/list/nonExistentUser99999
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+
+###############################################
+# 5. ADD SINGLE BOOKMARK
+
+
+###############################################
+
+
+### Add Bookmark: GitHub
+POST {{baseUrl}}/addBookmark
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}",
+  "link": "https://github.com"
+}
+
+
+### Add Bookmark: OpenAI Documentation
+POST {{baseUrl}}/addBookmark
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}",
+  "link": "https://platform.openai.com/docs"
+}
+
+
+### Add Bookmark: React Documentation
+POST {{baseUrl}}/addBookmark
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}",
+  "link": "https://react.dev"
+}
+
+
+### Add Bookmark: Stack Overflow Question
+POST {{baseUrl}}/addBookmark
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}",
+  "link": "https://stackoverflow.com/questions/1"
+}
+
+
+### Add Bookmark: MDN Web Docs
+POST {{baseUrl}}/addBookmark
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}",
+  "link": "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
+}
+
+
+### Add Bookmark: Missing Link (Should Fail - 400)
+POST {{baseUrl}}/addBookmark
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}"
+}
+
+
+### Add Bookmark: Invalid URL Format (Should Fail - 400)
+POST {{baseUrl}}/addBookmark
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}",
+  "link": "not-a-valid-url"
+}
+
+
+### Add Bookmark: Missing UserId (Should Fail - 400)
+POST {{baseUrl}}/addBookmark
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "link": "https://github.com"
+}
+
+
+### Add Bookmark: Invalid UserId Format (Should Fail - 400)
+POST {{baseUrl}}/addBookmark
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "invalid user id with spaces!",
+  "link": "https://github.com"
+}
+
+
+### Add Bookmark: Missing Authorization (Should Fail - 401)
+POST {{baseUrl}}/addBookmark
+Content-Type: application/json
+
+{
+  "userId": "{{testUserId}}",
+  "link": "https://github.com"
+}
+
+
+### Add Bookmark: URL Too Long (Should Fail - 400)
+POST {{baseUrl}}/addBookmark
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}",
+  "link": "https://example.com/very-long-path/that-goes-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on"
+}
+
+
+###############################################
+# 6. RATE LIMIT TESTING
+
+
+###############################################
+
+
+### Rate Limit Test: Search (100 requests / 15 min)
+# Run this request 101+ times rapidly to trigger rate limit
+POST {{baseUrl}}/search/test
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}"
+}
+
+
+### Rate Limit Test: Upload (10 uploads / hour)
+# Run this request 11+ times within an hour to trigger rate limit
+POST {{baseUrl}}/upload
+Authorization: Bearer {{firebaseToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="userId"
+
+{{testUserId}}
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="bookmarks.html"
+Content-Type: text/html
+
+<!DOCTYPE NETSCAPE-Bookmark-file-1>
+<TITLE>Bookmarks</TITLE>
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+### Rate Limit Test: Add Bookmark (50 requests / hour)
+# Run this request 51+ times within an hour to trigger rate limit
+POST {{baseUrl}}/addBookmark
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}",
+  "link": "https://github.com"
+}
+
+
+###############################################
+# 7. ERROR SCENARIOS
+
+
+###############################################
+
+
+### Error: Invalid JSON Format
+POST {{baseUrl}}/search/test
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}"
+  // Invalid JSON - missing comma
+
+
+### Error: Unsupported HTTP Method
+PUT {{baseUrl}}/health
+Content-Type: application/json
+
+
+### Error: Non-existent Endpoint
+GET {{baseUrl}}/nonexistent
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+
+### Error: Malformed Authorization Header
+POST {{baseUrl}}/search/test
+Content-Type: application/json
+Authorization: InvalidToken
+
+{
+  "userId": "{{testUserId}}"
+}
+
+
+###############################################
+# 8. WORKFLOW TESTING
+
+
+###############################################
+
+
+### Workflow 1: New User - Upload → List → Search
+# Step 1: Upload bookmarks file
+POST {{baseUrl}}/upload
+Authorization: Bearer {{firebaseToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="userId"
+
+{{testUserId}}
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="bookmarks.html"
+Content-Type: text/html
+
+<!DOCTYPE NETSCAPE-Bookmark-file-1>
+<H1>Bookmarks</H1>
+<DL><p>
+    <DT><A HREF="https://github.com">GitHub</A>
+</DL><p>
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+### Step 2: Get all bookmarks
+GET {{baseUrl}}/list/{{testUserId}}
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+
+### Step 3: Search bookmarks
+POST {{baseUrl}}/search/github
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}"
+}
+
+
+### Workflow 2: Add Individual Bookmark → Search
+# Step 1: Add bookmark
+POST {{baseUrl}}/addBookmark
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}",
+  "link": "https://www.typescriptlang.org"
+}
+
+
+### Step 2: Search for new bookmark
+POST {{baseUrl}}/search/typescript
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}"
+}
+
+
+###############################################
+# 9. CACHE TESTING
+
+
+###############################################
+
+
+### Cache Test 1: First Request (Cache Miss)
+POST {{baseUrl}}/search/react hooks
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}"
+}
+
+
+### Cache Test 2: Immediate Repeat Request (Cache Hit - should be faster)
+POST {{baseUrl}}/search/react hooks
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "userId": "{{testUserId}}"
+}
+
+
+### Cache Test 3: Get Bookmarks (First time - Cache Miss)
+GET {{baseUrl}}/list/{{testUserId}}
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+
+### Cache Test 4: Get Bookmarks (Repeat - Cache Hit)
+GET {{baseUrl}}/list/{{testUserId}}
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+
+###############################################
+# NOTES FOR TESTING
+
+
+###############################################
+# Before running tests:
+# 1. Start the server: pnpm dev
+# 2. Start ChromaDB: docker run -p 8000:8000 chromadb/chroma
+# 3. Get Firebase ID Token from your frontend or Firebase Console
+# 4. Replace @firebaseToken with actual token
+# 5. Replace @testUserId with your Firebase user ID
+# 6. For file uploads, use VS Code REST Client extension or Postman
+
+# Expected Response Times:
+# - Health Check: <10ms
+# - Search (cached): <50ms
+# - Search (uncached): 100-500ms
+# - Upload: 5-30 seconds (depending on bookmark count)
+# - Get All: <100ms (cached), <500ms (uncached)
+# - Add Bookmark: 2-10 seconds (includes crawling)
+
+# Testing Tools:
+# - VS Code Extension: REST Client (humao.rest-client)
+# - Alternative: Postman, Insomnia, curl, httpie
+
+# How to use with VS Code REST Client:
+# 1. Install "REST Client" extension
+# 2. Click "Send Request" above any ### separator
+# 3. View response in the panel

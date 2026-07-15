@@ -1,0 +1,23 @@
+{
+  "name": "betterBookmark - AI-Powered Bookmark Search",
+  "short_name": "betterBookmark",
+  "description": "Effortlessly search and organize your bookmarks using AI. Save time with smart, personalized bookmark management.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4F46E5",
+  "icons": [
+    {
+      "src": "/LogoFull.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "orientation": "portrait",
+  "categories": ["productivity", "utilities"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "related_applications": []
+}

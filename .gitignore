@@ -1,0 +1,23 @@
+# deps
+node_modules/
+
+# turbo
+.turbo/
+
+# build outputs
+dist/
+.next/
+out/
+
+# logs
+*.log
+logs/
+
+# secrets — DO NOT COMMIT
+.env
+.env.*
+!.env.example
+**/serviceAccountKey.json
+
+# os
+.DS_Store

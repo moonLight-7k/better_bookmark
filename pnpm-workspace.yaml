@@ -1,0 +1,12 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+
+onlyBuiltDependencies:
+  - '@firebase/util'
+  - '@vercel/speed-insights'
+  - esbuild
+  - onnxruntime-node
+  - protobufjs
+  - sharp
+  - unrs-resolver
