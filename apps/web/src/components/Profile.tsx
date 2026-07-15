@@ -16,7 +16,7 @@ export default function profile() {
       </div>
       <ul
         tabIndex={0}
-        className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-[#2f2f2f] rounded-box w-52"
+        className="mt-3 z-1 p-2 shadow-sm menu menu-sm dropdown-content bg-[#2f2f2f] rounded-box w-52"
       >
         <li>
           <a className="justify-between">

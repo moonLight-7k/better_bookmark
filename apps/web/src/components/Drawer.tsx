@@ -164,7 +164,7 @@ export default function Drawer(): React.ReactElement {
       </div>
       <div
         className={`absolute h-screen ${
-          !isDrawerOpen ? "translate-x-[20rem]" : "translate-x-0"
+          !isDrawerOpen ? "translate-x-80" : "translate-x-0"
         } right-0 mt-[18px] duration-300 z-50`}
       >
         <div className="p-4 px-10 w-80 h-[92%] flex flex-col justify-between  gap-3 items-center  bg-[#323232] z-50 backdrop-blur-3xl ">
@@ -181,7 +181,7 @@ export default function Drawer(): React.ReactElement {
                   </span>
                 </button>
               </DialogTrigger>
-              <DialogContent className="modal-box bg-[#323232] border-[1px] border-[#ffffff2a] drop-shadow-xl">
+              <DialogContent className="modal-box bg-[#323232] border border-[#ffffff2a] drop-shadow-xl">
                 <form onSubmit={handleSubmit}>
                   <h3 className="p-4 text-2xl text-white text-center">
                     Import your bookmarks now!
@@ -214,7 +214,7 @@ export default function Drawer(): React.ReactElement {
                       <DialogClose asChild>
                         <button
                           type="button"
-                          className="text-white p-2 px-4 rounded-lg text-center bg-[#45454568] border-[1px] border-[#fff0] hover:border-[1px] hover:border-[#ffffff7c] duration-300 disabled:opacity-50"
+                          className="text-white p-2 px-4 rounded-lg text-center bg-[#45454568] border border-[#fff0] hover:border hover:border-[#ffffff7c] duration-300 disabled:opacity-50"
                           disabled={importStatus.type === "loading"}
                         >
                           Cancel
@@ -251,7 +251,7 @@ export default function Drawer(): React.ReactElement {
                   </span>
                 </button>
               </DialogTrigger>
-              <DialogContent className="modal-box bg-[#323232] border-[1px] border-[#ffffff2a] drop-shadow-xl">
+              <DialogContent className="modal-box bg-[#323232] border border-[#ffffff2a] drop-shadow-xl">
                 <h3 className="p-4 text-2xl text-white text-center">
                   Add your bookmarks link
                 </h3>
@@ -272,7 +272,7 @@ export default function Drawer(): React.ReactElement {
                           id="link"
                           type="url"
                           placeholder="https://example.com"
-                          className="text-white input input-bordered w-full p-2 bg-[#424242] rounded-md border-[1px] focus:border-[#9d9d9d9c] disabled:opacity-50"
+                          className="text-white input input-bordered w-full p-2 bg-[#424242] rounded-md border focus:border-[#9d9d9d9c] disabled:opacity-50"
                           required
                           value={link}
                           onChange={(e) => {
@@ -317,7 +317,7 @@ export default function Drawer(): React.ReactElement {
                       <DialogClose asChild>
                         <button
                           type="button"
-                          className="text-white p-2 px-4 rounded-lg text-center bg-[#45454568] border-[1px] border-[#fff0] hover:border-[1px] hover:border-[#ffffff7c] duration-300 disabled:opacity-50"
+                          className="text-white p-2 px-4 rounded-lg text-center bg-[#45454568] border border-[#fff0] hover:border hover:border-[#ffffff7c] duration-300 disabled:opacity-50"
                           disabled={addBookmarkStatus.type === "loading"}
                         >
                           Cancel

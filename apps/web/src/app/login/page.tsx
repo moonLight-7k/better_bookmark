@@ -339,11 +339,11 @@ export default function LoginPage() {
           </form>
 
           <div className="flex flex-row items-center self-center  my-4">
-            <Separator className="flex-grow bg-gray-600 w-1/3" />
+            <Separator className="grow bg-gray-600 w-1/3" />
             <span className="px-3 text-nowrap text-xs text-gray-400 uppercase">
               Or
             </span>
-            <Separator className="flex-grow bg-gray-600 w-1/3" />
+            <Separator className="grow bg-gray-600 w-1/3" />
           </div>
 
           {/* Social Login */}

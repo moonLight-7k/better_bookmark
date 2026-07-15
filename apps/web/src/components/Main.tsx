@@ -139,7 +139,7 @@ export default function Main() {
         gridColumns={columns}
         className="w-fit h-screen"
         containerStyle={{ width: gridWidth }}
-        itemClassName="flex flex-grow justify-center items-center"
+        itemClassName="flex grow justify-center items-center"
         scrollContainerRef={scrollContainerRef}
         observerTarget={loadingIndicator}
         renderItem={(data: SearchResult, index: number) => (

@@ -124,7 +124,7 @@ export default function ErrorDisplay({
   return (
     <>
       <Dialog open={showReportDialog} onOpenChange={setShowReportDialog}>
-        <DialogContent className="bg-[#323232] border-[1px] border-[#ffffff2a] text-white">
+        <DialogContent className="bg-[#323232] border border-[#ffffff2a] text-white">
           <DialogHeader>
             <DialogTitle className="text-xl font-medium">
               {reportSubmitted ? "Report Sent" : "Report Issue"}

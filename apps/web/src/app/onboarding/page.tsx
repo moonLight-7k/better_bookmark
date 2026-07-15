@@ -71,7 +71,7 @@ function OnboardingPage() {
 
   return (
     <div
-      className=" max-w-screen px-4 lg:px-[22rem] py-8"
+      className=" max-w-screen px-4 lg:px-88 py-8"
       style={{ backgroundColor: "#323232", color: "#ffffff" }}
     >
       <div className="flex flex-col items-center mb-8">
@@ -86,7 +86,7 @@ function OnboardingPage() {
 
       <div className="grid gap-8 mb-10">
         {/* Browser Instructions Section */}
-        <section className="rounded-lg p-6 shadow-sm border border-white/20">
+        <section className="rounded-lg p-6 shadow-xs border border-white/20">
           <h2 className="text-2xl font-semibold mb-4 flex items-center">
             Export Bookmarks from Your Browser
           </h2>
@@ -105,7 +105,7 @@ function OnboardingPage() {
         </section>
 
         {/* File Upload Section */}
-        <section className="rounded-lg p-6 shadow-sm border border-white/20">
+        <section className="rounded-lg p-6 shadow-xs border border-white/20">
           <h2 className="text-2xl font-semibold mb-4 flex items-center">
             Upload Your Bookmarks
           </h2>

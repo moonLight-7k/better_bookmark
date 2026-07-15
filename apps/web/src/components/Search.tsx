@@ -288,7 +288,7 @@ const GlobalSearch: React.FC = () => {
             <TooltipTrigger asChild>
               <span
                 onClick={() => setIsOpen(true)}
-                className="cursor-pointer fixed bottom-16 right-36 md:right-36 sm:right-10 max-sm:right-4 max-sm:bottom-4 rounded-full bg-orange gap-2 hover:scale-110 hover:shadow-xl transition-all ease-in-out w-fit px-2.5 max-sm:px-2 inline-flex h-12 max-sm:h-11 animate-shimmer items-center justify-center border-[2px] border-[#ff8f44] hover:border-[#F26B0F] bg-[linear-gradient(110deg,#F26B0F,45%,#FA812F,55%,#F26B0F)] bg-[length:200%_100%] font-medium text-white/90 focus:outline-none focus:ring-2 focus:ring-[#F96E2A] focus:ring-offset-2"
+                className="cursor-pointer fixed bottom-16 right-36 md:right-36 sm:right-10 max-sm:right-4 max-sm:bottom-4 rounded-full bg-orange gap-2 hover:scale-110 hover:shadow-xl transition-all ease-in-out w-fit px-2.5 max-sm:px-2 inline-flex h-12 max-sm:h-11 animate-shimmer items-center justify-center border-2 border-[#ff8f44] hover:border-[#F26B0F] bg-[linear-gradient(110deg,#F26B0F,45%,#FA812F,55%,#F26B0F)] bg-size-[200%_100%] font-medium text-white/90 focus:outline-hidden focus:ring-2 focus:ring-[#F96E2A] focus:ring-offset-2"
               >
                 <Sparkles
                   size={26}
@@ -344,7 +344,7 @@ const GlobalSearch: React.FC = () => {
               }}
               disabled={sortedResults.length === 0}
               aria-label="Open selected bookmark"
-              className="absolute hidden sm:flex items-end gap-2 border border-[#F96E2A] right-2 top-1/2 -translate-y-1/2 rounded-md bg-gradient-to-r from-[#F26B0F]/10 to-[#FA812F]/20 hover:from-[#F26B0F]/50 hover:to-[#FA812F] px-3 py-1 text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:from-[#F26B0F]/10 disabled:hover:to-[#FA812F]/20"
+              className="absolute hidden sm:flex items-end gap-2 border border-[#F96E2A] right-2 top-1/2 -translate-y-1/2 rounded-md bg-linear-to-r from-[#F26B0F]/10 to-[#FA812F]/20 hover:from-[#F26B0F]/50 hover:to-[#FA812F] px-3 py-1 text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:from-[#F26B0F]/10 disabled:hover:to-[#FA812F]/20"
             >
               <span className="font-mono text-xs font-medium">Enter</span>
               <CornerDownLeft size={14} color="white" />
@@ -352,7 +352,7 @@ const GlobalSearch: React.FC = () => {
             {/* Mobile: Close button */}
             <button
               onClick={() => setIsOpen(false)}
-              className="absolute flex sm:hidden items-center justify-center right-2 top-1/2 -translate-y-1/2 rounded-md bg-gradient-to-r from-[#F26B0F]/10 to-[#FA812F]/20 hover:from-[#F26B0F]/50 hover:to-[#FA812F] px-2 py-1 text-white transition-colors border border-[#F96E2A]"
+              className="absolute flex sm:hidden items-center justify-center right-2 top-1/2 -translate-y-1/2 rounded-md bg-linear-to-r from-[#F26B0F]/10 to-[#FA812F]/20 hover:from-[#F26B0F]/50 hover:to-[#FA812F] px-2 py-1 text-white transition-colors border border-[#F96E2A]"
               aria-label="Close search"
             >
               <X size={16} color="white" />
@@ -462,7 +462,7 @@ const GlobalSearch: React.FC = () => {
                         setSortBy(e.target.value as SortOption);
                         setSelectedIndex(0);
                       }}
-                      className="bg-[#444444] border border-gray-600 rounded px-2 py-1 pr-8 max-sm:pr-7 text-white max-sm:text-xs focus:outline-none cursor-pointer appearance-none"
+                      className="bg-[#444444] border border-gray-600 rounded px-2 py-1 pr-8 max-sm:pr-7 text-white max-sm:text-xs focus:outline-hidden cursor-pointer appearance-none"
                       aria-label="Sort results by"
                     >
                       <option value="relevance" className="bg-[#323232]">
@@ -503,7 +503,7 @@ const GlobalSearch: React.FC = () => {
                     className={`result-card transition-all duration-200 transform ${
                       selectedIndex === index
                         ? "scale-[1.03] ring-2 ring-[#F96E2A] rounded-lg shadow-md shadow-[#F96E2A]/20"
-                        : "hover:scale-[1.02] hover:ring-1 hover:ring-[#F96E2A]/70 hover:shadow-sm rounded-lg"
+                        : "hover:scale-[1.02] hover:ring-1 hover:ring-[#F96E2A]/70 hover:shadow-xs rounded-lg"
                     }`}
                   >
                     <Card
@@ -612,10 +612,10 @@ const GlobalSearch: React.FC = () => {
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 max-sm:w-full">
               <div className="flex items-center max-sm:text-[10px]">
                 <div className="flex gap-1 mr-1.5">
-                  <kbd className="px-2 py-1 max-sm:px-1.5 max-sm:py-0.5 bg-[#444] text-white/70 border border-gray-600 rounded shadow-sm hover:bg-[#555] transition-colors text-xs max-sm:text-[10px]">
+                  <kbd className="px-2 py-1 max-sm:px-1.5 max-sm:py-0.5 bg-[#444] text-white/70 border border-gray-600 rounded shadow-xs hover:bg-[#555] transition-colors text-xs max-sm:text-[10px]">
                     ↑
                   </kbd>
-                  <kbd className="px-2 py-1 max-sm:px-1.5 max-sm:py-0.5 bg-[#444] text-white/70 border border-gray-600 rounded shadow-sm hover:bg-[#555] transition-colors text-xs max-sm:text-[10px]">
+                  <kbd className="px-2 py-1 max-sm:px-1.5 max-sm:py-0.5 bg-[#444] text-white/70 border border-gray-600 rounded shadow-xs hover:bg-[#555] transition-colors text-xs max-sm:text-[10px]">
                     ↓
                   </kbd>
                 </div>
@@ -625,7 +625,7 @@ const GlobalSearch: React.FC = () => {
               </div>
 
               <div className="flex items-center max-sm:text-[10px]">
-                <kbd className="px-2 py-1 max-sm:px-1.5 max-sm:py-0.5 text-white/70 bg-[#444] border border-gray-600 rounded shadow-sm mr-1.5 hover:bg-[#555] transition-colors text-xs max-sm:text-[10px]">
+                <kbd className="px-2 py-1 max-sm:px-1.5 max-sm:py-0.5 text-white/70 bg-[#444] border border-gray-600 rounded shadow-xs mr-1.5 hover:bg-[#555] transition-colors text-xs max-sm:text-[10px]">
                   Enter
                 </kbd>
                 <span className="text-gray-300 max-sm:text-[10px]">
@@ -634,7 +634,7 @@ const GlobalSearch: React.FC = () => {
               </div>
 
               <div className="flex items-center max-sm:text-[10px]">
-                <kbd className="px-2 py-1 max-sm:px-1.5 max-sm:py-0.5 text-white/70 bg-[#444] border border-gray-600 rounded shadow-sm mr-1.5 hover:bg-[#555] transition-colors text-xs max-sm:text-[10px]">
+                <kbd className="px-2 py-1 max-sm:px-1.5 max-sm:py-0.5 text-white/70 bg-[#444] border border-gray-600 rounded shadow-xs mr-1.5 hover:bg-[#555] transition-colors text-xs max-sm:text-[10px]">
                   Esc
                 </kbd>
                 <span className="text-gray-300 max-sm:text-[10px]">

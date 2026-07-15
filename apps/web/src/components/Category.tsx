@@ -128,9 +128,9 @@ export default function Category() {
 
         <dialog
           id="addCategory"
-          className="modal p-4 rounded-md bg-[#3232320f] backdrop-blur-sm duration-100"
+          className="modal p-4 rounded-md bg-[#3232320f] backdrop-blur-xs duration-100"
         >
-          <div className="modal-box bg-[#323232] border-[1px] border-[#ffffff2a] drop-shadow-xl duration-300">
+          <div className="modal-box bg-[#323232] border border-[#ffffff2a] drop-shadow-xl duration-300">
             <p className="p-6 text-2xl text-white text-center">
               Create Category!
             </p>
@@ -147,7 +147,7 @@ export default function Category() {
                     <input
                       type="text"
                       placeholder="Type here..."
-                      className="text-white input input-bordered w-full max-w-xs p-2 bg-[#424242] rounded-md border-[1px] focus:border-[#9d9d9d9c]"
+                      className="text-white input input-bordered w-full max-w-xs p-2 bg-[#424242] rounded-md border focus:border-[#9d9d9d9c]"
                       value={newCategoryName}
                       onChange={(e) => setNewCategoryName(e.target.value)}
                       required
